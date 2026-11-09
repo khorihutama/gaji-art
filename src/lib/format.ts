@@ -30,6 +30,17 @@ export function formatTanggal(s: string): string {
   return `${d} ${NAMA_BULAN[m - 1]} ${y}`
 }
 
+export const JENIS_LABEL: Record<string, string> = {
+  kasbon: 'Kasbon',
+  pelunasan: 'Pelunasan',
+}
+
+export const METODE_LABEL: Record<string, string> = {
+  tunai: 'Tunai',
+  transfer: 'Transfer',
+  'e-wallet': 'E-wallet',
+}
+
 /** {year: 2026, month: 11} -> 'November 2026' */
 export function formatBulan(ref: { year: number; month: number }): string {
   return `${NAMA_BULAN[ref.month - 1]} ${ref.year}`
