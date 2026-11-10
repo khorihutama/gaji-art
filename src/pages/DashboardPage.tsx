@@ -9,8 +9,8 @@ import {
   todayStr,
 } from '../lib/payroll'
 import { useAppData, usePersistentState } from '../lib/store'
-import { formatRupiah } from '../lib/format'
-import { EmptyState, MonthNav, StatusChip, SummaryRow } from '../components/ui'
+import { EmptyState, MonthNav } from '../components/ui'
+import { WorkerCard } from '../components/WorkerCard'
 
 export default function DashboardPage() {
   const data = useAppData()
@@ -55,45 +55,13 @@ export default function DashboardPage() {
             const summary = monthlySummary(w, absentSet, data.takings, ref, today)
             const saldoSekarang = balanceThrough(w, absentSet, data.takings, today)
             return (
-              <article key={w.id} className="rounded-2xl bg-white p-4 shadow-sm">
-                <div className="flex items-center justify-between gap-2">
-                  <h2 className="font-bold">
-                    {w.nama}
-                    {!w.aktif && (
-                      <span className="ml-2 rounded-full bg-stone-200 px-2 py-0.5 text-xs font-semibold text-stone-600">
-                        Nonaktif
-                      </span>
-                    )}
-                  </h2>
-                  <StatusChip balance={saldoSekarang} />
-                </div>
-                <div className="mt-1 divide-y divide-stone-100">
-                  <SummaryRow
-                    label="Saldo awal bulan ini"
-                    value={formatRupiah(summary.openingBalance)}
-                    valueClass={summary.openingBalance < 0 ? 'text-red-600' : undefined}
-                  />
-                  <SummaryRow label="Hak gaji bulan ini" value={formatRupiah(summary.accrued)} />
-                  <SummaryRow label="Diambil bulan ini" value={formatRupiah(summary.taken)} />
-                  <SummaryRow
-                    label="Saldo kumulatif saat ini"
-                    value={formatRupiah(saldoSekarang)}
-                    strong
-                    valueClass={saldoSekarang < 0 ? 'text-red-600' : 'text-emerald-700'}
-                  />
-                </div>
-                <p className="mt-1 text-xs text-stone-500">
-                  {summary.presentDays} hari hadir bulan ini · gaji{' '}
-                  {formatRupiah(w.gajiBulanan)}/bulan
-                </p>
-                <Link
-                  to="/rekap"
-                  onClick={() => setWorkerId(w.id)}
-                  className="mt-2 inline-block text-sm font-semibold text-emerald-700 underline"
-                >
-                  Lihat rekap {w.nama} →
-                </Link>
-              </article>
+              <WorkerCard
+                key={w.id}
+                worker={w}
+                summary={summary}
+                balance={saldoSekarang}
+                onLihatRekap={() => setWorkerId(w.id)}
+              />
             )
           })}
         </div>
